@@ -22,8 +22,8 @@ Maven should be available on your system, if not please do as below
 Check if maven is successfully installed using "mvn -version" in command prompt, this command should return your command version
 
 ### Steps to clone project
-git clone https://github.com/NandanSharma/KaplanEmailTestAutomation.git
-cd KaplanEmailTestAutomation
+1. git clone https://github.com/NandanSharma/KaplanEmailTestAutomation.git
+2. cd KaplanEmailTestAutomation
 
 ### Steps to run project via Command Prompt
 mvn clean test -DtestNGxmlName=testng.xml
