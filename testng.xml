@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Proton Email Automation Suite">
+
+	<listeners>
+		<listener class-name="com.email.qa.ExtentReportListener.ExtentReporterNG" />
+	</listeners>
+
+	<test name="Proton Email Test Cases">
+		<!-- Test Runner Class -->
+		<classes>
+			<class name="com.email.qa.testcases.TestLoginPage"></class>
+			<class name="com.email.qa.testcases.TestInboxPage"></class>
+		</classes><!-- Classes -->
+
+	</test> <!-- Test -->
+</suite> <!-- Suite -->

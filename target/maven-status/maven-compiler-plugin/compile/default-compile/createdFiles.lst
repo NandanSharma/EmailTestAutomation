@@ -1,0 +1,6 @@
+com\email\qa\ExtentReportListener\ExtentReporterNG.class
+com\email\qa\pages\Inbox.class
+com\email\qa\pages\LoginPage.class
+com\email\qa\util\TestUtil.class
+com\email\qa\base\TestBase.class
+com\email\qa\util\WebEventListener.class
