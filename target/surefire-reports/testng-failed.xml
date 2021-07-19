@@ -8,7 +8,7 @@
     <classes>
       <class name="com.email.qa.testcases.TestInboxPage">
         <methods>
-          <include name="verifySubjectAndBodyTest" invocation-numbers="1"/>
+          <include name="verifySubjectAndBodyTest" invocation-numbers="0 1"/>
           <include name="setup"/>
           <include name="teardown"/>
         </methods>

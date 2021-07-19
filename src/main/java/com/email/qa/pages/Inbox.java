@@ -80,7 +80,7 @@ public class Inbox extends TestBase{
 			
 			String emailBody = "";	
 			
-			ArrayList<ArrayList<String>> arrSubBody = new ArrayList();
+			ArrayList<ArrayList<String>> arrSubBody = new ArrayList<>();
 			
 			ArrayList<String> arrSubject = new ArrayList<String>();
 			ArrayList<String> arrBody = new ArrayList<String>();

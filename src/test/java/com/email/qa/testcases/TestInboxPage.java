@@ -70,7 +70,7 @@ public class TestInboxPage extends TestBase {
 	@Test(priority = 2, dataProvider = "getEmailTestData")
 	public void verifySubjectAndBodyTest(String strSubjectToFind, String strBodyToFind) throws InterruptedException {
 
-		ArrayList<ArrayList<String>> arrSubBody = new ArrayList();
+		ArrayList<ArrayList<String>> arrSubBody = new ArrayList<>();
 		ArrayList<String> arrSubject = new ArrayList<String>();
 		ArrayList<String> arrBody = new ArrayList<String>();
 		String strSubject = "";
@@ -126,6 +126,6 @@ public class TestInboxPage extends TestBase {
 
 	@AfterMethod
 	public void teardown() {
-		driver.quit();
+		//driver.quit();
 	}
 }
