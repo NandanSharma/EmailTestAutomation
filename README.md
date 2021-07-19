@@ -37,3 +37,6 @@ mvn clean test -DtestNGxmlName=testng.xml
 6.	Wait for some time for eclipse to download all dependencies from Maven Repository which are in POM.xml 
 7.	Right click on testing.xml and select Run As-> TestNG Suite.
 
+### Login Configruation change
+If you want to change the user login configuration please modify "KaplanEmailTestAutomation/src/main/java/com/email/qa/config/config.properties" file.
+
