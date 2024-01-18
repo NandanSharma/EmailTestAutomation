@@ -1,1 +1,52 @@
 /target/
+.project
+target/
+.vscode/settings.json
+.settings/org.eclipse.jdt.core.prefs
+target/classes/com/email/qa/ExtentReportListener/ExtentReporterNG.class
+target/classes/com/email/qa/base/TestBase.class
+target/classes/com/email/qa/pages/Inbox.class
+target/classes/com/email/qa/util/TestUtil.class
+target/classes/com/email/qa/util/WebEventListener.class
+target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst
+target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
+target/surefire-reports/bullet_point.png
+target/surefire-reports/collapseall.gif
+target/surefire-reports/email_Test_automation_Extent.html
+target/surefire-reports/emailable-report.html
+target/surefire-reports/failed.png
+target/surefire-reports/index.html
+target/surefire-reports/jquery.min.js
+target/surefire-reports/navigator-bullet.png
+target/surefire-reports/passed.png
+target/surefire-reports/skipped.png
+target/surefire-reports/testng-failed.xml
+target/surefire-reports/testng-reports.css
+target/surefire-reports/testng-reports.js
+target/surefire-reports/testng-reports1.css
+target/surefire-reports/testng-reports2.js
+target/surefire-reports/testng-results.xml
+target/surefire-reports/testng.css
+target/surefire-reports/Proton Email Automation Suite/Proton Email Test Cases.html
+target/surefire-reports/Proton Email Automation Suite/Proton Email Test Cases.xml
+target/surefire-reports/Proton Email Automation Suite/testng-failed.xml
+target/surefire-reports/junitreports/TEST-com.email.qa.testcases.TestInboxPage.xml
+target/surefire-reports/junitreports/TEST-com.email.qa.testcases.TestLoginPage.xml
+target/surefire-reports/old/index.html
+target/surefire-reports/old/Proton Email Automation Suite/classes.html
+target/surefire-reports/old/Proton Email Automation Suite/groups.html
+target/surefire-reports/old/Proton Email Automation Suite/index.html
+target/surefire-reports/old/Proton Email Automation Suite/main.html
+target/surefire-reports/old/Proton Email Automation Suite/methods-alphabetical.html
+target/surefire-reports/old/Proton Email Automation Suite/methods-not-run.html
+target/surefire-reports/old/Proton Email Automation Suite/methods.html
+target/surefire-reports/old/Proton Email Automation Suite/Proton Email Test Cases.properties
+target/surefire-reports/old/Proton Email Automation Suite/reporter-output.html
+target/surefire-reports/old/Proton Email Automation Suite/testng.xml.html
+target/surefire-reports/old/Proton Email Automation Suite/toc.html
+target/test-classes/com/email/qa/testcases/TestInboxPage.class
+target/test-classes/com/email/qa/testcases/TestLoginPage.class
+.classpath
+.project
