@@ -1,6 +1,8 @@
 package com.email.qa.testcases;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
+
 import org.openqa.selenium.NoSuchElementException;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -13,6 +15,8 @@ import com.email.qa.base.TestBase;
 import com.email.qa.pages.Inbox;
 import com.email.qa.pages.LoginPage;
 import com.email.qa.util.TestUtil;
+
+import static org.testng.Assert.assertTrue;
 
 public class TestInboxPage extends TestBase {
 
@@ -42,8 +46,10 @@ public class TestInboxPage extends TestBase {
 	public void verifyInboxPageTitleTest() throws InterruptedException {
 		objInbox.waitTillInboxPageLoads();
 		String title = objInbox.validateInboxPageTitle();
-		Assert.assertEquals(title, "Inbox | " + prop.getProperty("username") + " | ProtonMail",
-				"Inbox page title is not matching");
+		String regex = "^\\(\\d+\\) Inbox \\| %s \\| Proton Mail$".formatted(prop.getProperty("username"));
+		/*Assert.assertEquals(title, "Inbox | " + prop.getProperty("username") + " | Proton Mail",
+				"Inbox page title is not matching");*/
+		Assert.assertTrue(Pattern.matches(regex, title), "Inbox page title is not matching");
 	}
 
 	@Test(priority = 1)
@@ -54,7 +60,7 @@ public class TestInboxPage extends TestBase {
 			emailNumberOnly = totalEmails.replaceAll("[^0-9]", "");
 			Assert.assertNotNull(totalEmails);
 		} catch (NoSuchElementException e) {
-			Assert.assertTrue(false, "Your inbox do not contain any emails");
+			assertTrue(false, "Your inbox do not contain any emails");
 		}
 	}
 
