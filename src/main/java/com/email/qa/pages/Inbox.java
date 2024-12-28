@@ -52,7 +52,7 @@ public class Inbox extends TestBase{
 			customWait = new WebDriverWait(driver, 120);
 		}
 		
-    //Actions:
+    //Actions for webelements:
 		
 		public String validateInboxPageTitle() {
 			return driver.getTitle();		
