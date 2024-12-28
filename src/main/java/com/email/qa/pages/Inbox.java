@@ -64,7 +64,7 @@ public class Inbox extends TestBase{
 		}
 		
 		public String validateIfNoEmail() {
-			return lbl_NoMessages.getText(); //method not used
+			return lbl_NoMessages.getText(); //method not used in class
 		}
 		
 		public void searchEmailbySubject(String searchString) throws InterruptedException {
