@@ -1,9 +1,11 @@
 package com.email.qa.pages;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -12,14 +14,20 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.email.qa.base.TestBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Inbox extends TestBase{
 	
 	WebDriverWait customWait;
+	private static final Logger LOGGER = LoggerFactory.getLogger(Inbox.class);
 	
 	//Object Repo OR Page Factory
-		@FindBy(id="global_search")
+		@FindBy(xpath="//input[@data-testid='search-keyword']")
 		WebElement txtBox_Search;
+
+		@FindBy(xpath="//input[@data-testid='input-input-element']")
+		WebElement txtBox_SearchPopup;
 		
 		@FindBy(xpath="//button[@type='submit']")
 		WebElement btn_Search;
@@ -35,20 +43,15 @@ public class Inbox extends TestBase{
 		
 		@FindBy(xpath="//span[@data-testid='message-column:subject']")
 		List<WebElement> lbl_Subjects;
-		
-		@FindBy(xpath="//div[@style='--index:0;']")
-		WebElement lst_firstMessages;
-		
-		@FindBy(xpath="//div[@data-testid='message-content:body']//div")
-		WebElement lbl_MessageBody;
+
 		
 	//Initialization of all objects with PageFactory
 		public Inbox() {
 			PageFactory.initElements(driver, this);			
-			customWait = new WebDriverWait(driver, 120);
+			customWait = new WebDriverWait(driver, Duration.ofSeconds(120));
 		}
 		
-    //Actions:
+    //Actions for webelements:
 		
 		public String validateInboxPageTitle() {
 			return driver.getTitle();		
@@ -60,13 +63,17 @@ public class Inbox extends TestBase{
 		}
 		
 		public String validateIfNoEmail() {
-			return lbl_NoMessages.getText(); //method not used
+			return lbl_NoMessages.getText(); //method not used in class
 		}
 		
-		public void searchEmailbySubject(String searchSring) throws InterruptedException {
-			//btn_Inbox.click();
+		public void searchEmailbySubject(String searchString) throws InterruptedException {
+			btn_Inbox.click();
+			Thread.sleep(5000);
 			customWait.until(ExpectedConditions.visibilityOfAllElements(lbl_Subjects));
-			txtBox_Search.sendKeys(searchSring + Keys.ENTER);
+			customWait.until(ExpectedConditions.elementToBeClickable(txtBox_Search));
+			txtBox_Search.click();
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", txtBox_SearchPopup);
+			txtBox_SearchPopup.sendKeys(searchString + Keys.ENTER);
 			Thread.sleep(3000);
 			customWait.until(ExpectedConditions.visibilityOfAllElements(lbl_Subjects));
 		}
@@ -74,40 +81,42 @@ public class Inbox extends TestBase{
 		public void waitTillInboxPageLoads() {
 			customWait.until(ExpectedConditions.visibilityOf(btn_Inbox));
 		}
-		
-		
-		public ArrayList<ArrayList<String>> getSubjecAndBodyOfEmail() throws InterruptedException {
-			
-			String emailBody = "";	
-			
-			ArrayList<ArrayList<String>> arrSubBody = new ArrayList<>();
-			
-			ArrayList<String> arrSubject = new ArrayList<String>();
-			ArrayList<String> arrBody = new ArrayList<String>();
-			customWait.until(ExpectedConditions.visibilityOfAllElements(lbl_Subjects));
-			Thread.sleep(5000); //sometimes proton mail is slow in completely loading the page, EC was not working hence added this.
-			for(WebElement lbl_Subject:lbl_Subjects) {
-				
-				arrSubject.add(lbl_Subject.getText());				
-				lbl_Subject.click();//click on the subject to open the message
-				customWait.until(ExpectedConditions.visibilityOf(lbl_MessageBody));
-				Thread.sleep(5000);		//sometimes proton mail is slow in completely loading the page, EC was not working hence added this.		      
-				List<WebElement> childs = lbl_MessageBody.findElements(By.xpath(".//*"));
-				//System.out.println("count of child:" + childs.size());
-				for(WebElement e: childs ) //traversing through child elements of email body to get all the text
-				{
-					emailBody = emailBody + e.getText();
-				}				
-				
-				arrBody.add(emailBody);	
-				emailBody = "";
-			}			
-			
-			//return the list items		
-			
-			arrSubBody.add(arrSubject);
-			arrSubBody.add(arrBody);
-								
-			return arrSubBody;
+
+
+	public ArrayList<ArrayList<String>> getSubjecAndBodyOfEmail() throws InterruptedException {
+
+		ArrayList<ArrayList<String>> emailDetails = new ArrayList<>();
+		ArrayList<String> subjects = new ArrayList<>();
+		ArrayList<String> bodies = new ArrayList<>();
+		StringBuilder emailBodyBuilder = new StringBuilder();
+
+		customWait.until(ExpectedConditions.visibilityOfAllElements(lbl_Subjects));
+
+
+		for (WebElement subjectElement : lbl_Subjects) {
+			subjects.add(subjectElement.getText());
+			subjectElement.click(); // Click on the subject to open the message
+
+			Thread.sleep(10000);
+
+			//Switch to frame when available
+			customWait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.xpath("//iframe[@title='Email content']")));
+
+			//read all child elements from it
+			List<WebElement> childElements = driver.findElements(By.xpath(".//*"));
+			LOGGER.debug("Child elements of the frame: {}",childElements);
+			for (WebElement element : childElements) {
+				emailBodyBuilder.append(element.getText());
+			}
+
+			driver.switchTo().defaultContent(); // Switch back to default content
+			bodies.add(emailBodyBuilder.toString());
 		}
+
+		emailDetails.add(subjects);
+		emailDetails.add(bodies);
+
+		return emailDetails;
+	}
+
 }

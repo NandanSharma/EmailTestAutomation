@@ -7,9 +7,11 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.events.EventFiringWebDriver;
+import org.openqa.selenium.support.events.EventFiringDecorator;
+import org.openqa.selenium.support.events.WebDriverListener;
 import com.email.qa.util.TestUtil;
 import com.email.qa.util.WebEventListener;
 // Import the necessary libraries.
@@ -19,11 +21,10 @@ import org.openqa.selenium.remote.CapabilityType;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-public class TestBase {
+public abstract class TestBase {
 
 	public static WebDriver driver;
 	public static Properties prop;
-	public static EventFiringWebDriver e_driver;
 	public static WebEventListener eventListener;
 
 	public TestBase() {
@@ -47,11 +48,10 @@ public class TestBase {
 		if (browserName.equals("chrome")) {
 			WebDriverManager.chromedriver().setup();
 			ChromeOptions chromeOptions = new ChromeOptions();
-			
-			chromeOptions.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-			chromeOptions.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
 
-			driver = new ChromeDriver();
+			chromeOptions.setAcceptInsecureCerts(true);
+
+			driver = new ChromeDriver(chromeOptions);
 		} else if (browserName.equals("firefox")) {
 
 			// TODO implement firefox here later
@@ -63,18 +63,16 @@ public class TestBase {
 			// Create EdgeOptions instance
 			EdgeOptions edgeOptions = new EdgeOptions();
 			// Set desired capabilities for Edge browser
-			edgeOptions.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-			edgeOptions.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
+			edgeOptions.setAcceptInsecureCerts(true);
 
 			// Create EdgeDriver instance
 			driver = new EdgeDriver(edgeOptions);
 		}
 
 		// Listener class to give console output of the action performed on the browser
-		e_driver = new EventFiringWebDriver(driver);
 		eventListener = new WebEventListener();
-		e_driver.register(eventListener);
-		driver = e_driver;
+		WebDriverListener listener = new WebEventListener();
+		driver = new EventFiringDecorator(listener).decorate(driver);
 
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
@@ -84,5 +82,4 @@ public class TestBase {
 		driver.get(prop.getProperty("url"));
 
 	}
-
 }
