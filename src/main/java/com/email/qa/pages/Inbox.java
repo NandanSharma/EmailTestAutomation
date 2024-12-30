@@ -14,10 +14,13 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.email.qa.base.TestBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Inbox extends TestBase{
 	
 	WebDriverWait customWait;
+	private static final Logger LOGGER = LoggerFactory.getLogger(Inbox.class);
 	
 	//Object Repo OR Page Factory
 		@FindBy(xpath="//input[@data-testid='search-keyword']")
@@ -40,12 +43,7 @@ public class Inbox extends TestBase{
 		
 		@FindBy(xpath="//span[@data-testid='message-column:subject']")
 		List<WebElement> lbl_Subjects;
-		
-		@FindBy(xpath="//div[@style='--index:0;']")
-		WebElement lst_firstMessages;
 
-		@FindBy(xpath="//div[@data-testid='message-content:body']")
-		WebElement lbl_MessageBody;
 		
 	//Initialization of all objects with PageFactory
 		public Inbox() {
@@ -69,7 +67,7 @@ public class Inbox extends TestBase{
 		}
 		
 		public void searchEmailbySubject(String searchString) throws InterruptedException {
-			//btn_Inbox.click();
+
 			customWait.until(ExpectedConditions.visibilityOfAllElements(lbl_Subjects));
 			customWait.until(ExpectedConditions.elementToBeClickable(txtBox_Search));
 			txtBox_Search.click();
@@ -85,10 +83,11 @@ public class Inbox extends TestBase{
 
 
 	public ArrayList<ArrayList<String>> getSubjecAndBodyOfEmail() throws InterruptedException {
-		String emailBody = "";
+
 		ArrayList<ArrayList<String>> emailDetails = new ArrayList<>();
 		ArrayList<String> subjects = new ArrayList<>();
 		ArrayList<String> bodies = new ArrayList<>();
+		StringBuilder emailBodyBuilder = new StringBuilder();
 
 		customWait.until(ExpectedConditions.visibilityOfAllElements(lbl_Subjects));
 
@@ -97,34 +96,20 @@ public class Inbox extends TestBase{
 			subjects.add(subjectElement.getText());
 			subjectElement.click(); // Click on the subject to open the message
 
-			customWait.until(ExpectedConditions.visibilityOfAllElements(lbl_MessageBody));
-			lbl_MessageBody.click();
 			Thread.sleep(10000);
-			List<WebElement> emailIframe = driver.findElements(By.tagName("iframe"));
-			// Switch to the iframe
-			for(WebElement iframe : emailIframe) {
-				System.out.println(iframe.getAttribute("outerHTML"));
-				System.out.println(iframe.getAttribute("innerHTML"));
 
-				/*driver.switchTo().frame(iframe);
-				if(driver.findElements(By.xpath("//iframe[@title='Email content']")).size() > 0) {
-					break;
-				}*/
-			}
+			//Switch to frame when available
+			customWait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.xpath("//iframe[@title='Email content']")));
 
-			customWait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//iframe[@title='Email content']")));
+			//read all child elements from it
 			List<WebElement> childElements = driver.findElements(By.xpath(".//*"));
-			StringBuilder emailBodyBuilder = new StringBuilder();
-
+			LOGGER.debug("Child elements of the frame: {}",childElements);
 			for (WebElement element : childElements) {
 				emailBodyBuilder.append(element.getText());
 			}
 
-			emailBody = emailBodyBuilder.toString();
 			driver.switchTo().defaultContent(); // Switch back to default content
-
-			bodies.add(emailBody);
-			emailBody = "";
+			bodies.add(emailBodyBuilder.toString());
 		}
 
 		emailDetails.add(subjects);
