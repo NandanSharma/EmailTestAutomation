@@ -1,5 +1,6 @@
 package com.email.qa.pages;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class Inbox extends TestBase{
 	//Initialization of all objects with PageFactory
 		public Inbox() {
 			PageFactory.initElements(driver, this);			
-			customWait = new WebDriverWait(driver, 120);
+			customWait = new WebDriverWait(driver, Duration.ofSeconds(120));
 		}
 		
     //Actions for webelements:

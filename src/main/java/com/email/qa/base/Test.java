@@ -16,8 +16,7 @@ public class Test {
         EdgeOptions edgeOptions = new EdgeOptions();
 
         // Set desired capabilities for Edge browser
-        edgeOptions.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-        edgeOptions.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
+        edgeOptions.setAcceptInsecureCerts(true);
 
         // Create EdgeDriver instance
         EdgeDriver edgeDriver = new EdgeDriver(edgeOptions);
