@@ -44,6 +44,7 @@ public abstract class TestBase {
 	public static void initialization() {
 
 		String browserName = prop.getProperty("browser");
+		boolean headlessMode = Boolean.parseBoolean(prop.getProperty("headless", "false"));
 
 		if (browserName.equals("chrome")) {
 			WebDriverManager.chromedriver().setup();
@@ -63,6 +64,9 @@ public abstract class TestBase {
 			// Create EdgeOptions instance
 			EdgeOptions edgeOptions = new EdgeOptions();
 			// Set desired capabilities for Edge browser
+			if (headlessMode) {
+				edgeOptions.addArguments("--headless=new"); // Use --headless=new for Edge versions 109.0.1518.55 and above.
+			}
 			edgeOptions.setAcceptInsecureCerts(true);
 
 			// Create EdgeDriver instance
