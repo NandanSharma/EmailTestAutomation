@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import org.openqa.selenium.NoSuchElementException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -26,6 +28,8 @@ public class TestInboxPage extends TestBase {
 	String emailNumberOnly;
 	String sheetName = "emailSearch";
 	SoftAssert softAssert = new SoftAssert();
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(TestInboxPage.class);
 
 	// constructor
 	public TestInboxPage() {
@@ -76,53 +80,23 @@ public class TestInboxPage extends TestBase {
 	@Test(priority = 2, dataProvider = "getEmailTestData")
 	public void verifySubjectAndBodyTest(String strSubjectToFind, String strBodyToFind) throws InterruptedException {
 
-		ArrayList<ArrayList<String>> arrSubBody = new ArrayList<>();
-		ArrayList<String> arrSubject = new ArrayList<String>();
-		ArrayList<String> arrBody = new ArrayList<String>();
-		String strSubject = "";
-		String strBody = "";
-//		String strSubjectToFind = "Email Assignment"; // TODO parameter this
-//		String strBodyToFind = "AdaFWsf"; // TODO parameter this
-
 		objInbox.searchEmailbySubject(strSubjectToFind); 
 
-		arrSubBody = objInbox.getSubjecAndBodyOfEmail();
-		arrSubject = arrSubBody.get(0);
-		arrBody = arrSubBody.get(1);
+		ArrayList<ArrayList<String>> emails = objInbox.getSubjecAndBodyOfEmail();
+		ArrayList<String> subjects = emails.get(0);
+		ArrayList<String> bodies = emails.get(1);
 
-		for (int msgCount = 0; msgCount < arrSubject.size(); msgCount++) {
-			strSubject = arrSubject.get(msgCount);
-			strBody = arrBody.get(msgCount);
-			int emailCountnter = msgCount +1;
-			
-			//verify			
-			
-			if (strSubject.contains(strSubjectToFind) && strBody.contains(strBodyToFind)) {
-				System.out.println("Email " + emailCountnter + " contains " + strSubjectToFind + " in Subject and "
-						+ strBodyToFind + " in Body");
-				softAssert.assertTrue(strSubject.contains(strSubjectToFind) && strBody.contains(strBodyToFind), "Email " + emailCountnter + " contains " + strSubjectToFind + " in Subject and "
-						+ strBodyToFind + " in Body");
-				
-			} else if (strSubject.contains(strSubjectToFind) || strBody.contains(strBodyToFind)) {
-				if (strSubject.contains(strSubjectToFind)) {
-					System.out.println("Email " + emailCountnter + " contains " + strSubjectToFind + " in Subject but "
-							+ strBodyToFind + " is not present in Body");
-					softAssert.assertTrue(strSubject.contains(strSubjectToFind) && strBody.contains(strBodyToFind), "Email " + emailCountnter + " contains " + strSubjectToFind + " in Subject but "
-							+ strBodyToFind + " is not present in Body");
-					
-				}
-				if (strBody.contains(strBodyToFind)) {
-					System.out.println("Email " + emailCountnter + " do not contain " + strSubjectToFind
-							+ " in Subject but " + strBodyToFind + " is present in Body");
-					softAssert.assertTrue(strSubject.contains(strSubjectToFind) && strBody.contains(strBodyToFind), "Email " + emailCountnter + " do not contain " + strSubjectToFind
-							+ " in Subject but " + strBodyToFind + " is present in Body");
-					
-				}
+		for (int i = 0; i < subjects.size(); i++) {
+			boolean subjectMatch = subjects.get(i).contains(strSubjectToFind);
+			boolean bodyMatch = bodies.get(i).contains(strBodyToFind);
+
+			String message = String.format("Email %d contains '%s' in Subject and '%s' in Body", i + 1, strSubjectToFind, strBodyToFind);
+			if (subjectMatch && bodyMatch) {
+				LOGGER.info(message);
+				softAssert.assertTrue(true, message);
 			} else {
-				System.out.println("Email " + emailCountnter + " do not contain " + strSubjectToFind + " in Subject and "
-						+ strBodyToFind + " is not present in Body");				
-				softAssert.assertTrue(strSubject.contains(strSubjectToFind) && strBody.contains(strBodyToFind), "Email " + emailCountnter + " do not contain " + strSubjectToFind + " in Subject and "
-						+ strBodyToFind + " is not present in Body");
+				LOGGER.info("Email " + (i+1) + " does not contain both " + strSubjectToFind + " and " + strBodyToFind);
+				softAssert.assertTrue(false, message);
 			}
 			softAssert.assertAll();
 			Thread.sleep(2000);

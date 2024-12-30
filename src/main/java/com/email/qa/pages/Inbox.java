@@ -67,7 +67,8 @@ public class Inbox extends TestBase{
 		}
 		
 		public void searchEmailbySubject(String searchString) throws InterruptedException {
-
+			btn_Inbox.click();
+			Thread.sleep(5000);
 			customWait.until(ExpectedConditions.visibilityOfAllElements(lbl_Subjects));
 			customWait.until(ExpectedConditions.elementToBeClickable(txtBox_Search));
 			txtBox_Search.click();
