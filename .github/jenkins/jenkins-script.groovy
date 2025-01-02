@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/NandanSharma/EmailTestAutomation.git'
+                git branch: 'main', url: 'https://github.com/NandanSharma/EmailTestAutomation.git'
             }
         }
         stage('Build') {
@@ -23,7 +23,7 @@ pipeline {
         }
         stage('Stop Selenium Grid') {
             steps {
-                sh 'docker-compose -f /home/ec2-user/selenium-grid down'
+                sh 'docker-compose -f /home/ec2-user/selenium-grid/docker-compose.yml down'
             }
         }
     }
