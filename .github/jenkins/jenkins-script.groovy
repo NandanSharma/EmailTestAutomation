@@ -8,7 +8,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'mvn clean install'
+                sh 'mvn clean compile'
             }
         }
         stage('Start Selenium Grid') {
