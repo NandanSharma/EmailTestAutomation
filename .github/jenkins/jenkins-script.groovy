@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Start Selenium Grid') {
             steps {
-                sh 'docker-compose -f /home/ec2-user/selenium-grid/docker-compose.yml up -d'
+                sh 'sudo docker-compose -f /home/ec2-user/selenium-grid/docker-compose.yml up -d'
             }
         }
         stage('Run Tests') {
@@ -23,7 +23,7 @@ pipeline {
         }
         stage('Stop Selenium Grid') {
             steps {
-                sh 'docker-compose -f /home/ec2-user/selenium-grid/docker-compose.yml down'
+                sh 'sudo docker-compose -f /home/ec2-user/selenium-grid/docker-compose.yml down'
             }
         }
     }
